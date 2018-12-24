@@ -1,29 +1,32 @@
 package com.abrarkotwal.androideventbus;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 public class MainActivity extends AppCompatActivity {
+    private EditText etMessage;
+    private TextView messageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addFragment();
-    }
+        etMessage = (EditText) findViewById(R.id.activityData);
+        messageView = (TextView) findViewById(R.id.message);
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        GlobalBus.getBus().register(this);
+        addFragment();
     }
 
     private void addFragment() {
@@ -33,17 +36,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendMessageToFragment(View view) {
-        EditText etMessage = (EditText) findViewById(R.id.activityData);
-        Events.ActivityFragmentMessage activityFragmentMessageEvent =
-                new Events.ActivityFragmentMessage(String.valueOf(etMessage.getText()));
+        Events.MessageTransfer activityFragmentMessageEvent =
+                new Events.MessageTransfer(String.valueOf(etMessage.getText()));
 
         GlobalBus.getBus().post(activityFragmentMessageEvent);
     }
 
+    public void sendMessageToActivity(View view) {
+        Events.MessageTransfer activityActivityMessage =
+                new Events.MessageTransfer(String.valueOf(etMessage.getText()));
+
+        GlobalBus.getBus().postSticky(activityActivityMessage);
+
+        Log.d("Abrar", String.valueOf(activityActivityMessage.getMessage()));
+
+        Intent intent = new Intent(this,SecondActivity.class);
+        startActivity(intent);
+    }
+
     @SuppressLint("SetTextI18n")
     @Subscribe
-    public void getMessage(Events.FragmentActivityMessage fragmentActivityMessage) {
-        TextView messageView = (TextView) findViewById(R.id.message);
+    public void getMessage(Events.MessageTransfer fragmentActivityMessage) {
         messageView.setText(getString(R.string.message_received) + " " + fragmentActivityMessage.getMessage());
 
         Toast.makeText(getApplicationContext(),
@@ -52,8 +65,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    public void onStart() {
+        super.onStart();
+        if (!GlobalBus.getBus().isRegistered(this))
+            GlobalBus.getBus().register(this);
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         GlobalBus.getBus().unregister(this);
     }
 }

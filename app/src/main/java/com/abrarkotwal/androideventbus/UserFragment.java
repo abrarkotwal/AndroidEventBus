@@ -18,7 +18,8 @@ public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // register the event to listen.
-        GlobalBus.getBus().register(this);
+        if (!GlobalBus.getBus().isRegistered(this))
+            GlobalBus.getBus().register(this);
         return inflater.inflate(R.layout.fragment_user, container, false);
     }
 
@@ -36,8 +37,8 @@ public class UserFragment extends Fragment {
                 EditText etMessage = (EditText) view.findViewById(R.id.editText);
 
                 // We are broadcasting the message here to listen to the subscriber.
-                Events.FragmentActivityMessage fragmentActivityMessageEvent =
-                        new Events.FragmentActivityMessage(
+                Events.MessageTransfer fragmentActivityMessageEvent =
+                        new Events.MessageTransfer(
                                 String.valueOf(etMessage.getText()));
                 GlobalBus.getBus().post(fragmentActivityMessageEvent);
             }
@@ -45,7 +46,7 @@ public class UserFragment extends Fragment {
     }
 
     @Subscribe
-    public void getMessage(Events.ActivityFragmentMessage activityFragmentMessage) {
+    public void getMessage(Events.MessageTransfer activityFragmentMessage) {
         TextView messageView = (TextView) getView().findViewById(R.id.message);
         messageView.setText(
                 getString(R.string.message_received) +

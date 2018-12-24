@@ -54,4 +54,31 @@
         android:orientation="vertical">
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/secondActivityLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="@dimen/padding_medium"
+        android:layout_below="@+id/fragmentContainer">
+
+        <TextView
+            android:id="@+id/stickyTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_medium"
+            android:text="@string/title_stickyEvent"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/sendMessageToSecondActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/stickyTitle"
+            android:layout_centerHorizontal="true"
+            android:onClick="sendMessageToActivity"
+            android:text="@string/send_message_fragment"/>
+
+    </RelativeLayout>
+
 </RelativeLayout>
