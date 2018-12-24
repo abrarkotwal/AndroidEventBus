@@ -43,15 +43,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendMessageToActivity(View view) {
-        Events.MessageTransfer activityActivityMessage =
-                new Events.MessageTransfer(String.valueOf(etMessage.getText()));
+        Events.MessageTransfer activityActivityMessageEvent =
+                new Events.MessageTransfer(etMessage.getText().toString());
 
-        GlobalBus.getBus().postSticky(activityActivityMessage);
+        GlobalBus.getBus().postSticky(activityActivityMessageEvent);
 
-        Log.d("Abrar", String.valueOf(activityActivityMessage.getMessage()));
+        // Start SecondActivity.
+        startActivity(new Intent(this, SecondActivity.class));
 
-        Intent intent = new Intent(this,SecondActivity.class);
-        startActivity(intent);
     }
 
     @SuppressLint("SetTextI18n")

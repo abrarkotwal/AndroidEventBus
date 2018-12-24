@@ -8,27 +8,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 public class SecondActivity extends AppCompatActivity {
-    private TextView tvDisplayMessage;
+    private TextView messageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        tvDisplayMessage = findViewById(R.id.tvDisplayMessage);
+        messageView = findViewById(R.id.tvDisplayMessage);
     }
 
-    @SuppressLint("SetTextI18n")
-    @Subscribe
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void getMessage(Events.MessageTransfer activityActivityMessage) {
-        tvDisplayMessage.setText(getString(R.string.message_received) + " " + activityActivityMessage.getMessage());
-        Log.d("Abrar", String.valueOf(activityActivityMessage.getMessage()));
+        messageView.setText(getString(R.string.message_received) + " " + activityActivityMessage.getMessage());
 
-        Toast.makeText(getApplicationContext(), getString(R.string.message_main_activity) + " " + activityActivityMessage.getMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),
+                getString(R.string.message_second_activity) + " " + activityActivityMessage.getMessage(),
+                Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     protected void onStart() {
