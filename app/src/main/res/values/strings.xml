@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Android Event Bus</string>
+    <string name="title_main">Sender</string>
+    <string name="hint_message">Enter</string>
+    <string name="send_message_fragment">Send Message to Activity</string>
+    <string name="title_fragment">Receiver</string>
+    <string name="send_message_activity">Send Message to Fragment</string>
+    <string name="message_received">Message Received</string>
+    <string name="message_fragment">Message</string>
+    <string name="message_main_activity">Message Send to Fragment</string>
+</resources>
